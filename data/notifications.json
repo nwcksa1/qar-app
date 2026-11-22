@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ntf_JpK3oCXWualp",
+    "recipientId": "usr_lhC3vI1X0h2a",
+    "type": "review_issued",
+    "title": "New QAR review issued",
+    "message": "C.01 – Validation of new connections with previous outstanding amounts (2026-10) — reviewer remarks added.",
+    "reviewId": "qar_tha-krhWtZAF",
+    "read": false,
+    "createdAt": "2026-11-22T19:29:17.895Z"
+  },
+  {
+    "id": "ntf_AJeeGk_w4SA2",
+    "recipientId": "usr_lhC3vI1X0h2a",
+    "type": "review_issued",
+    "title": "New QAR review issued",
+    "message": "C.02 – Customer segmentation validation (2026-09) — reviewer remarks added.",
+    "reviewId": "qar_WTAFwk_RjIAu",
+    "read": false,
+    "createdAt": "2026-11-22T19:30:36.640Z"
+  }
+]

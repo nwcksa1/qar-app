@@ -1,0 +1,16 @@
+{
+  "name": "nwc-qar-webapp",
+  "version": "1.2.0",
+  "description": "Quality Assurance Review (QAR) web application for NWC monthly operational control reviews — zero dependencies.",
+  "main": "server.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node launch.js",
+    "test": "node test.js",
+    "start:unsafe-direct": "node server.js",
+    "reset-admin": "node server.js --reset-admin-password"
+  },
+  "dependencies": {}
+}

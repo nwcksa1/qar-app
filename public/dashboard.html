@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>My Reviews · NWC Quality Assurance Review</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="app">
+  <!-- ============ Sidebar ============ -->
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="brand-mark"><img class="logo-img" data-logo src="/img/logo.svg" alt="" width="40" height="40"><span>NWC QAR<small>Employee Portal</small></span></div>
+    <nav class="nav">
+      <div class="nav-label">Workspace</div>
+      <button type="button" data-view="reviews" data-title="My Reviews" class="active"><i data-icon="clipboard"></i><span>My Reviews</span></button>
+      <button type="button" data-view="actions" data-title="Action Required"><i data-icon="zap"></i><span>Action Required</span> <span class="count hidden" id="actionCount">0</span></button>
+      <div class="nav-label">Account</div>
+      <button type="button" data-view="account" data-title="My Account"><i data-icon="user"></i><span>My Account</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <div data-me-name></div><div data-me-role class="small"></div>
+      <button type="button" class="btn btn-sm btn-block btn-signout" id="logoutBtn"><i data-icon="logout"></i> Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <!-- ============ Topbar ============ -->
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-toggle" aria-label="Toggle menu"><i data-icon="menu"></i></button>
+      <div class="title" id="viewTitle">My Reviews</div>
+      <div class="spacer"></div>
+      <button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle theme"></button>
+      <div class="notif-wrap">
+        <button type="button" class="icon-btn" id="notifBtn" aria-haspopup="true" aria-label="Notifications"><i data-icon="bell"></i><span class="notif-badge hidden" id="notifBadge">0</span></button>
+        <div class="notif-panel hidden" id="notifPanel" role="region" aria-label="Notifications">
+          <header><span>Notifications</span><button type="button" class="btn btn-sm btn-ghost" id="notifReadAll">Mark all read</button></header>
+          <ul class="notif-list" id="notifList"></ul>
+        </div>
+      </div>
+      <div class="user-chip"><span class="avatar" data-me-initials></span><span data-me-name></span></div>
+    </header>
+
+    <main class="content">
+      <div class="alert alert-warn must-change hidden">For your security, please <a href="#" data-open-password>change your temporary password</a>.</div>
+
+      <!-- ============ View: My Reviews ============ -->
+      <section class="view" id="view-reviews">
+        <div class="page-head">
+          <div><h1>My Quality Assurance Reviews</h1><p class="muted">Monthly control reviews issued to you by the QA team.</p></div>
+          <div class="toolbar">
+            <div class="field"><label for="fYear">Year</label><select id="fYear"></select></div>
+            <div class="field"><label for="fMonth">Month</label><select id="fMonth"></select></div>
+            <button type="button" class="btn" id="exportBtn"><i data-icon="download"></i> Export CSV</button>
+          </div>
+        </div>
+        <div class="metrics" id="metrics"></div>
+        <div class="review-grid" id="reviewGrid" aria-live="polite"></div>
+      </section>
+
+      <!-- ============ View: Action required ============ -->
+      <section class="view hidden" id="view-actions">
+        <div class="page-head"><div><h1>Action Required</h1><p class="muted">New reviews awaiting your response and approved changes to implement.</p></div></div>
+        <div class="review-grid" id="actionGrid"></div>
+      </section>
+
+      <!-- ============ View: Account ============ -->
+      <section class="view hidden" id="view-account">
+        <div class="card" style="max-width:640px">
+          <div class="card-header"><h2>My Account</h2></div>
+          <div class="card-body">
+            <div class="kv" id="accountKv"></div>
+            <p style="margin-top:1rem"><button type="button" class="btn btn-primary" data-open-password>Change password</button></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ============ Review detail dialog ============ -->
+<dialog class="modal" id="reviewDialog" aria-labelledby="reviewTitle">
+  <div class="modal-head"><h2 id="reviewTitle">Review</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+  <div class="modal-body" id="reviewBody"></div>
+</dialog>
+
+<!-- ============ Change password dialog ============ -->
+<dialog class="modal sm" id="passwordDialog" aria-labelledby="pwTitle">
+  <form id="passwordForm">
+    <div class="modal-head"><h2 id="pwTitle">Change password</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+    <div class="modal-body">
+      <div id="pwForcedNote" class="alert alert-warn hidden">You are signed in with a temporary password. Set a new personal password to continue.</div>
+      <div id="pwError" class="alert alert-error hidden" role="alert"></div>
+      <div class="field"><label for="pwCur">Current password</label><input id="pwCur" name="currentPassword" type="password" autocomplete="current-password" required></div>
+      <div class="field"><label for="pwNew">New password</label><input id="pwNew" name="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+        <div class="hint">At least 8 characters with letters and numbers.</div></div>
+      <div class="field"><label for="pwConf">Confirm new password</label><input id="pwConf" name="confirmPassword" type="password" autocomplete="new-password" required></div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn btn-primary">Update password</button></div>
+  </form>
+</dialog>
+
+<script src="/js/common.js"></script>
+<script src="/js/review-view.js"></script>
+<script src="/js/user.js"></script>
+</body>
+</html>

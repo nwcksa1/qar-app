@@ -1,0 +1,10 @@
+{
+  "result": "pass",
+  "total": 213,
+  "passed": 213,
+  "failed": 0,
+  "failures": [],
+  "node": "v26.13.1",
+  "finishedAt": "2026-11-22T19:23:12.851Z",
+  "durationMs": 4869
+}

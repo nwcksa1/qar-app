@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard · NWC Quality Assurance Review</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="app">
+  <!-- ============ Sidebar ============ -->
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="brand-mark"><img class="logo-img" data-logo src="/img/logo.svg" alt="" width="40" height="40"><span>NWC QAR<small>Admin Portal</small></span></div>
+    <nav class="nav">
+      <div class="nav-label">Reviews</div>
+      <button type="button" data-view="overview" data-title="Reviews Overview" class="active"><i data-icon="grid"></i><span>Overview</span></button>
+      <button type="button" data-view="queue" data-title="Action Queue"><i data-icon="inbox"></i><span>Action Queue</span> <span class="count hidden" id="queueCount">0</span></button>
+      <button type="button" data-view="preview" data-title="Preview as Employee"><i data-icon="eye"></i><span>Employee Preview</span></button>
+      <div class="nav-label">Administration</div>
+      <button type="button" data-view="users" data-title="User Management"><i data-icon="users"></i><span>Users</span></button>
+      <button type="button" data-view="controls" data-title="Monthly Controls Catalog"><i data-icon="book"></i><span>Controls Catalog</span></button>
+      <button type="button" data-view="account" data-title="My Account"><i data-icon="user"></i><span>My Account</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <div data-me-name></div><div data-me-role class="small"></div>
+      <button type="button" class="btn btn-sm btn-block btn-signout" id="logoutBtn"><i data-icon="logout"></i> Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-toggle" aria-label="Toggle menu"><i data-icon="menu"></i></button>
+      <div class="title" id="viewTitle">Reviews Overview</div>
+      <div class="spacer"></div>
+      <button type="button" class="btn btn-primary btn-sm" id="newReviewTop"><i data-icon="plus"></i> New Review</button>
+      <button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle theme"></button>
+      <div class="notif-wrap">
+        <button type="button" class="icon-btn" id="notifBtn" aria-haspopup="true" aria-label="Notifications"><i data-icon="bell"></i><span class="notif-badge hidden" id="notifBadge">0</span></button>
+        <div class="notif-panel hidden" id="notifPanel" role="region" aria-label="Notifications">
+          <header><span>Notifications</span><button type="button" class="btn btn-sm btn-ghost" id="notifReadAll">Mark all read</button></header>
+          <ul class="notif-list" id="notifList"></ul>
+        </div>
+      </div>
+      <div class="user-chip"><span class="avatar" data-me-initials></span><span data-me-name></span></div>
+    </header>
+
+    <main class="content">
+      <div class="alert alert-warn must-change hidden">You are using a temporary password. <a href="#" data-open-password>Change it now</a>.</div>
+
+      <!-- ============ Overview ============ -->
+      <section class="view" id="view-overview">
+        <div class="metrics" id="metrics"></div>
+        <div class="card">
+          <div class="card-header filter-head">
+            <div class="filters">
+              <div class="field"><label for="fYear">Year</label><select id="fYear"></select></div>
+              <div class="field"><label for="fMonth">Month</label><select id="fMonth"></select></div>
+              <div class="field"><label for="fUser">Employee</label><select id="fUser"></select></div>
+              <div class="field"><label for="fControl">Control</label><select id="fControl"></select></div>
+              <div class="field"><label for="fStatus">Status</label><select id="fStatus"></select></div>
+              <div class="field f-search"><label for="fSearch">Search</label><input id="fSearch" type="search" placeholder="Employee, control, period…"></div>
+            </div>
+            <div class="toolbar filter-actions">
+              <button type="button" class="btn" id="exportBtn"><i data-icon="download"></i> Export CSV</button>
+              <button type="button" class="btn btn-primary" id="newReviewBtn"><i data-icon="plus"></i> New Review</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table class="data" aria-label="QAR reviews">
+            <thead><tr><th>Period</th><th>Employee</th><th>Control</th><th>Score</th><th>Status</th><th>Change</th><th>Updated</th><th class="actions">Actions</th></tr></thead>
+            <tbody id="reviewRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ============ Action queue ============ -->
+      <section class="view hidden" id="view-queue">
+        <div class="page-head"><div><h1>Action Queue</h1><p class="muted">Employee responses to resolve and completed changes to verify.</p></div></div>
+        <div class="card"><div class="table-wrap"><table class="data">
+          <thead><tr><th>Employee</th><th>Control</th><th>Period</th><th>Waiting for</th><th>Since</th><th class="actions">Action</th></tr></thead>
+          <tbody id="queueRows"></tbody></table></div></div>
+      </section>
+
+      <!-- ============ Preview ============ -->
+      <section class="view hidden" id="view-preview">
+        <div class="banner alert-info"><strong>Preview mode.</strong> You are seeing exactly what the selected employee receives from the server — hidden checks, hidden scores/comments and internal notes are stripped.</div>
+        <div class="card card-body filters preview-filters">
+          <div class="field"><label for="pUser">Employee</label><select id="pUser"></select></div>
+          <div class="field"><label for="pYear">Year</label><select id="pYear"></select></div>
+          <div class="field"><label for="pMonth">Month</label><select id="pMonth"></select></div>
+        </div>
+        <div class="review-grid" id="previewGrid"></div>
+      </section>
+
+      <!-- ============ Users ============ -->
+      <section class="view hidden" id="view-users">
+        <div class="page-head"><div><h1>User Management</h1><p class="muted">Employees receive reviews in the User Portal; administrators issue and verify reviews.</p></div>
+          <button type="button" class="btn btn-primary" id="newUserBtn"><i data-icon="plus"></i> Add user</button></div>
+        <div class="card"><div class="table-wrap"><table class="data">
+          <thead><tr><th>Name</th><th>Username</th><th>Department</th><th>Role</th><th>Status</th><th>Reviews</th><th>Last sign-in</th><th class="actions">Actions</th></tr></thead>
+          <tbody id="userRows"></tbody></table></div></div>
+      </section>
+
+      <!-- ============ Controls catalog ============ -->
+      <section class="view hidden" id="view-controls">
+        <div class="page-head"><div><h1>Monthly Controls Catalog</h1><p class="muted">Official catalog of the 50 NWC monthly controls.</p></div>
+          <div class="field" style="min-width:260px;margin:0"><label for="ctlSearch">Search</label><input id="ctlSearch" type="search" placeholder="ID or name"></div></div>
+        <div class="card"><div class="table-wrap"><table class="data"><thead><tr><th>Control ID</th><th>Control</th><th>Reviews issued</th></tr></thead><tbody id="controlRows"></tbody></table></div></div>
+      </section>
+
+      <!-- ============ Account ============ -->
+      <section class="view hidden" id="view-account">
+        <div class="card" style="max-width:640px"><div class="card-header"><h2>My Account</h2></div>
+          <div class="card-body"><div class="kv" id="accountKv"></div>
+            <p style="margin-top:1rem"><button type="button" class="btn btn-primary" data-open-password>Change password</button></p></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ============ Review editor (create / edit) ============ -->
+<dialog class="modal" id="editorDialog" aria-labelledby="editorTitle">
+  <form id="editorForm" novalidate>
+    <div class="modal-head"><h2 id="editorTitle">New QAR Review</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+    <div class="modal-body">
+      <div id="editorError" class="alert alert-error hidden" role="alert"></div>
+      <div class="form-grid">
+        <div class="field"><label for="eUser">Employee</label><select id="eUser" required></select></div>
+        <div class="field"><label for="ePeriod">Evaluation period</label><input id="ePeriod" type="month" required></div>
+      </div>
+      <div class="field combo" id="controlCombo">
+        <label for="eControlSearch">Control</label>
+        <input id="eControlSearch" type="text" role="combobox" aria-expanded="false" aria-controls="eControlList" aria-autocomplete="list" autocomplete="off" placeholder="Type an ID or name to search the 50 monthly controls…">
+        <input type="hidden" id="eControl">
+        <ul class="combo-list hidden" id="eControlList" role="listbox"></ul>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Rubric checks</h3>
+        <div class="table-wrap"><table class="rubric">
+          <thead><tr><th>Check</th><th>Status</th><th>Visible to employee</th></tr></thead>
+          <tbody id="rubricRows"></tbody></table></div>
+        <div class="score-preview" aria-live="polite">
+          <div><div class="small muted">Overall quality score</div><div class="big" id="scorePreview">—</div></div>
+          <div class="small" id="scoreDetail"></div>
+          <label class="checkbox" style="margin-left:auto"><input type="checkbox" id="visScore" checked> Score visible to employee</label>
+        </div>
+      </div>
+      <div class="field"><label for="eComment">Overall comment / reviewer remarks</label><textarea id="eComment" maxlength="4000"></textarea>
+        <label class="checkbox" style="margin-top:.35rem"><input type="checkbox" id="visComment" checked> Comment visible to employee</label></div>
+      <div class="field box lock-note"><label for="eInternal"><i data-icon="lock"></i> Admin internal notes</label>
+        <textarea id="eInternal" maxlength="4000"></textarea>
+        <div class="hint">Never transmitted to employees — stripped from all user APIs and CSV exports.</div></div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn btn-primary" id="editorSubmit">Issue review</button></div>
+  </form>
+</dialog>
+
+<!-- ============ Review detail (admin) ============ -->
+<dialog class="modal" id="detailDialog" aria-labelledby="detailTitle">
+  <div class="modal-head"><h2 id="detailTitle">Review</h2>
+    <button type="button" class="btn btn-sm" id="detailEdit"><i data-icon="edit"></i> Edit</button>
+    <button type="button" class="btn btn-sm btn-danger" id="detailDelete"><i data-icon="trash"></i> Delete</button>
+    <button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+  <div class="modal-body" id="detailBody"></div>
+</dialog>
+
+<!-- ============ Verify changes ============ -->
+<dialog class="modal sm" id="verifyDialog" aria-labelledby="verifyTitle">
+  <form id="verifyForm">
+    <div class="modal-head"><h2 id="verifyTitle">Verify Changes</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+    <div class="modal-body">
+      <div id="verifyInfo"></div>
+      <div class="field"><label for="verifyNote">Verification note</label><textarea id="verifyNote" maxlength="4000" placeholder="Optional for verification, required to request further changes"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="button" class="btn btn-danger" id="reopenBtn"><i data-icon="undo"></i> Request further changes</button>
+      <button type="submit" class="btn btn-success"><i data-icon="check"></i> Verify changes</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ============ User editor ============ -->
+<dialog class="modal sm" id="userDialog" aria-labelledby="userTitle">
+  <form id="userForm" novalidate>
+    <div class="modal-head"><h2 id="userTitle">Add user</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+    <div class="modal-body">
+      <div id="userError" class="alert alert-error hidden" role="alert"></div>
+      <div class="field"><label for="uFull">Full name</label><input id="uFull" name="fullName" type="text" required maxlength="120"></div>
+      <div class="form-grid">
+        <div class="field"><label for="uName">Username</label><input id="uName" name="username" type="text" required maxlength="40" autocomplete="off" spellcheck="false"></div>
+        <div class="field"><label for="uRole">Role</label><select id="uRole" name="role"><option value="user">Employee (User Portal)</option><option value="admin">Administrator</option></select></div>
+        <div class="field"><label for="uEmail">Email</label><input id="uEmail" name="email" type="email" maxlength="200"></div>
+        <div class="field"><label for="uDept">Department</label><input id="uDept" name="department" type="text" maxlength="120"></div>
+      </div>
+      <div class="field"><label for="uPass" id="uPassLabel">Temporary password</label><input id="uPass" name="password" type="password" autocomplete="new-password" maxlength="128">
+        <div class="hint" id="uPassHint">At least 8 characters with letters and numbers. The user will be asked to change it.</div></div>
+      <label class="checkbox" id="uActiveWrap"><input type="checkbox" id="uActive" name="active" checked> Account active</label>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>
+  </form>
+</dialog>
+
+<!-- ============ Preview detail ============ -->
+<dialog class="modal" id="previewDialog" aria-labelledby="previewTitle">
+  <div class="modal-head"><h2 id="previewTitle">Employee view</h2><span class="badge info">Preview</span><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+  <div class="modal-body" id="previewBody"></div>
+</dialog>
+
+<!-- ============ Change password ============ -->
+<dialog class="modal sm" id="passwordDialog" aria-labelledby="pwTitle">
+  <form id="passwordForm">
+    <div class="modal-head"><h2 id="pwTitle">Change password</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-icon="x"></i></button></div>
+    <div class="modal-body">
+      <div id="pwForcedNote" class="alert alert-warn hidden">You are signed in with a temporary password. Set a new personal password to continue.</div>
+      <div id="pwError" class="alert alert-error hidden" role="alert"></div>
+      <div class="field"><label for="pwCur">Current password</label><input id="pwCur" name="currentPassword" type="password" autocomplete="current-password" required></div>
+      <div class="field"><label for="pwNew">New password</label><input id="pwNew" name="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+        <div class="hint">At least 8 characters with letters and numbers.</div></div>
+      <div class="field"><label for="pwConf">Confirm new password</label><input id="pwConf" name="confirmPassword" type="password" autocomplete="new-password" required></div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn btn-primary">Update password</button></div>
+  </form>
+</dialog>
+
+<script src="/js/common.js"></script>
+<script src="/js/review-view.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# ============================================================================
+#  Render.com Blueprint — NWC QAR v1.2  (TEST ➜ PRODUCTION)
+#  The build step runs the full automated test suite. If any check fails the
+#  build fails, Render does NOT deploy, and the previous version keeps running.
+# ============================================================================
+services:
+  - type: web
+    name: qar-app
+    runtime: node
+    plan: starter                 # paid plan needed for the persistent disk below
+    buildCommand: "node test.js"
+    startCommand: "node server.js"
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY          # Render terminates HTTPS and forwards X-Forwarded-* headers
+        value: "true"
+      - key: DATA_DIR             # must match the disk mountPath
+        value: /var/data
+      - key: SESSION_SECRET       # random 64-char key, generated once by Render
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_EMAIL          # optional: admin can also sign in with this email
+        sync: false
+      - key: ADMIN_PASSWORD       # REQUIRED: set a strong value in the Render dashboard
+        sync: false
+    disk:
+      name: qar-data
+      mountPath: /var/data
+      sizeGB: 1
+# ----------------------------------------------------------------------------
+#  FREE PLAN: change "plan" to free, delete the "disk" block and the DATA_DIR
+#  variable. The app works, but all users/reviews are ERASED on every restart
+#  or redeploy (free instances also sleep after 15 minutes of inactivity).
+# ----------------------------------------------------------------------------

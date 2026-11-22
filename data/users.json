@@ -1,0 +1,32 @@
+[
+  {
+    "id": "usr_D_PEQ-UvO7vA",
+    "username": "admin",
+    "fullName": "QAR Administrator",
+    "email": "amkumar@nwc.com.sa",
+    "department": "Internal Audit",
+    "role": "admin",
+    "active": true,
+    "salt": "ac1b2f2c80426c341c3c8c94a2ff0a0f",
+    "passwordHash": "c838a6fa6e518a8584356f4ad152173265916d99628e8612272a87c544dd3576ce5ba2be20fde8a0e2625f82e75848c5ab0899cb5bfc60282662c2cbc0ba2691",
+    "mustChangePassword": false,
+    "createdAt": "2026-11-22T19:23:13.112Z",
+    "updatedAt": "2026-11-22T19:27:00.809Z",
+    "lastLoginAt": "2026-11-22T19:24:24.092Z"
+  },
+  {
+    "id": "usr_lhC3vI1X0h2a",
+    "username": "amu",
+    "fullName": "Amit Kumar",
+    "email": "test@gmail.com",
+    "department": "RA",
+    "role": "user",
+    "active": true,
+    "salt": "1f9c2cf8d2624e5a2b8fb722e8f1b21e",
+    "passwordHash": "f76e0a29739987b086ef24c06f82b73829694b003831201d73559426f6121a20da6538208adc27bcd0c34896bcbca5975c8f3701ba423514b02d1e7d92824931",
+    "mustChangePassword": false,
+    "createdAt": "2026-11-22T19:27:48.996Z",
+    "updatedAt": "2026-11-22T19:32:17.756Z",
+    "lastLoginAt": "2026-11-22T19:31:39.347Z"
+  }
+]

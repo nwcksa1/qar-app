@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="same-origin">
+  <title>Administrator Sign in · NWC Quality Assurance Review</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-portal="admin" class="auth-body">
+  <main class="auth-wrap">
+    <section class="auth-hero" aria-hidden="true">
+      <div class="brand-mark brand-light"><img class="logo-img" data-logo src="/img/logo.svg" alt="" width="44" height="44"><span>National Water Company<small>Quality Assurance Review</small></span></div>
+      <div class="hero-copy">
+        <span class="hero-eyebrow">Revenue Assurance · Monthly Controls</span>
+        <h1>Monthly control reviews,<br>done with confidence.</h1>
+        <p>Transparent scoring of the 50 monthly operational controls, structured feedback and verified remediation, in one secure place.</p>
+        <ul class="hero-points">
+          <li><i data-icon="chart"></i><span>Standardised 5-point rubric with automatic scoring</span></li>
+          <li><i data-icon="message"></i><span>Clarification, change request and verification workflow</span></li>
+          <li><i data-icon="bell"></i><span>Real-time notifications and threaded feedback</span></li>
+        </ul>
+      </div>
+      <p class="hero-foot"><i data-icon="shield"></i> Internal use only · All access is logged and monitored</p>
+      <div class="hero-wave"></div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-top"><button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle theme"></button></div>
+      <div class="auth-card">
+        <div class="auth-card-logo"><img class="logo-img" data-logo src="/img/logo.svg" alt="NWC" width="52" height="52"></div>
+        <span class="portal-tag">Admin Portal</span>
+        <h1>Administrator sign in</h1>
+        <p class="muted">Issue, resolve and verify monthly control reviews.</p>
+        <div id="loginError" class="alert alert-error hidden" role="alert" aria-live="assertive"></div>
+        <form id="loginForm" novalidate autocomplete="on">
+          <div class="field">
+            <label for="username">Username or email</label>
+            <input id="username" name="username" type="text" autocomplete="username" required autofocus spellcheck="false" autocapitalize="none" maxlength="200">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="128">
+              <button type="button" class="icon-btn" id="pwToggle" aria-label="Show password" aria-pressed="false"><i data-icon="eye"></i></button>
+            </div>
+          </div>
+          <button id="loginSubmit" class="btn btn-primary btn-block btn-lg" type="submit">Sign in</button>
+        </form>
+        <p class="auth-switch muted">Employee? <a href="/login.html">Go to the User Portal</a></p>
+        <p class="auth-secure small muted"><i data-icon="lock"></i> Encrypted connection · Session expires after 7 days</p>
+      </div>
+      <p class="auth-copy small muted">&copy; National Water Company · QAR</p>
+    </section>
+  </main>
+  <script src="/js/common.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>
